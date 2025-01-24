@@ -7,3 +7,5 @@ At homepage: make sure there is mobile nav; make sure that pricing button redire
 
 dashboard/:slug:make sure the text is human!
 ![alt text](problem1.png)
+
+Automation creation: Optimistic automation UI is not "quite" working

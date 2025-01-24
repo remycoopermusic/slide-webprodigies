@@ -3,6 +3,7 @@
 import { client } from "@/lib/prisma";
 
 export const createAutomation = async (clerkId: string, id?: string) => {
+  console.log(clerkId, id);
   return await client.user.update({
     where: {
       clerkId,

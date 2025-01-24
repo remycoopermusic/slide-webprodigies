@@ -17,11 +17,13 @@ import {
 export const createAutomations = async (id?: string) => {
   const user = await onCurrentUser();
   try {
+    console.log(id);
     const create = await createAutomation(user.id, id);
     if (create) return { status: 200, data: "Automation created", res: create };
 
     return { status: 404, data: "Oops! something went wrong" };
   } catch (error) {
+    console.log(error);
     return { status: 500, data: "Internal server error" };
   }
 };

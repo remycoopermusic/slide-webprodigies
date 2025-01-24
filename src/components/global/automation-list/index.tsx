@@ -3,27 +3,31 @@ import { usePaths } from "@/hooks/use-nav";
 import { cn, getMonth } from "@/lib/utils";
 import Link from "next/link";
 import React, { useMemo } from "react";
-import { Button } from "@/components/ui/button";
-import CreateAutomation from "../create-automation";
 import GradientButton from "../gradient-button";
+import { Button } from "@/components/ui/button";
+import { useQueryAutomations } from "@/hooks/user-queries";
+import CreateAutomation from "../create-automation";
+import { useMutationDataState } from "@/hooks/use-mutation-data";
 
 type Props = {};
 
 const AutomationList = (props: Props) => {
-  // const { data } = useQueryAutomations()
+  const { data } = useQueryAutomations();
 
-  // const { latestVariable } = useMutationDataState(['create-automation'])
+  const { latestVariable } = useMutationDataState(["create-automation"]);
+  console.log(latestVariable);
   const { pathname } = usePaths();
 
-  // const optimisticUiData = useMemo(() => {
-  //   if ((latestVariable && latestVariable?.variables &&  data)) {
-  //     const test = [latestVariable.variables, ...data.data]
-  //     return { data: test }
-  //   }
-  //   return data || { data: [] }
-  // }, [latestVariable, data])
+  const optimisticUiData = useMemo(() => {
+    if (latestVariable?.variables && data) {
+      console.log("HEY?", latestVariable);
+      const test = [latestVariable.variables, ...data.data];
+      return { data: test };
+    }
+    return data || { data: [] };
+  }, [latestVariable, data]);
 
-  if (true) {
+  if (data?.status !== 200 || data.data.length <= 0) {
     return (
       <div className="h-[70vh] flex justify-center items-center flex-col gap-y-3">
         <h3 className="text-lg text-gray-400">No Automations </h3>
