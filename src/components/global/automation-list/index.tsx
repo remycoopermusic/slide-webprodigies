@@ -15,18 +15,16 @@ const AutomationList = (props: Props) => {
   const { data } = useQueryAutomations();
 
   const { latestVariable } = useMutationDataState(["create-automation"]);
-  console.log(latestVariable);
   const { pathname } = usePaths();
 
   const optimisticUiData = useMemo(() => {
-    if (latestVariable?.variables && data) {
-      console.log("HEY?", latestVariable);
+    if (latestVariable && latestVariable?.variables && data) {
       const test = [latestVariable.variables, ...data.data];
       return { data: test };
     }
     return data || { data: [] };
   }, [latestVariable, data]);
-
+  console.log(data);
   if (data?.status !== 200 || data.data.length <= 0) {
     return (
       <div className="h-[70vh] flex justify-center items-center flex-col gap-y-3">
