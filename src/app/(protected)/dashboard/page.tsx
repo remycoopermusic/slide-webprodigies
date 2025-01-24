@@ -1,4 +1,4 @@
-import { onBoardUser } from "@/action/user";
+import { onBoardUser } from "@/actions/user";
 import Loader from "@/components/global/loader";
 import { redirect } from "next/navigation";
 import React from "react";
