@@ -34,7 +34,7 @@ const AutomationList = (props: Props) => {
 
   return (
     <div className="flex flex-col gap-y-3">
-      {optimisticUiData.data!.map((automation) => (
+      {/* {optimisticUiData.data!.map((automation) => (
         <Link
           href={`${pathname}/${automation.id}`}
           key={automation.id}
@@ -99,7 +99,7 @@ const AutomationList = (props: Props) => {
             )}
           </div>
         </Link>
-      ))}
+      ))} */}
     </div>
   );
 };
