@@ -24,11 +24,7 @@ export async function generateMetadata({ params }: { params: { id: string } }) {
 }
 
 const Page = async ({ params }: Props) => {
-  // const query = new QueryClient();
-  // await PrefetchUserAutomation(query, params.id);
-
   return (
-    // <HydrationBoundary state={dehydrate(query)}>
     <div className=" flex flex-col items-center gap-y-20">
       <AutomationsBreadCrumb id={params.id} />
       <div className="w-full lg:w-10/12 xl:w-6/12 p-5 rounded-xl flex flex-col bg-[#1D1D1D] gap-y-3">
@@ -38,10 +34,9 @@ const Page = async ({ params }: Props) => {
         </div>
         <Trigger id={params.id} />
       </div>
-      <ThenNode id={params.id} />
-      <PostNode id={params.id} />
+      {/* <ThenNode id={params.id} />
+      <PostNode id={params.id} /> */}
     </div>
-    // </HydrationBoundary>
   );
 };
 

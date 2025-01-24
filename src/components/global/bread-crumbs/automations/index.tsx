@@ -2,9 +2,9 @@
 import { ChevronRight, PencilIcon } from "lucide-react";
 import React from "react";
 import ActivateAutomationButton from "../../activate-automation-button";
-import { useQueryAutomation } from "@/hooks/user-queries";
-import { useEditAutomation } from "@/hooks/use-automations";
-import { useMutationDataState } from "@/hooks/use-mutation-data";
+// import { useQueryAutomation } from "@/hooks/user-queries";
+// import { useEditAutomation } from "@/hooks/use-automations";
+// import { useMutationDataState } from "@/hooks/use-mutation-data";
 import { Input } from "@/components/ui/input";
 
 type Props = {
@@ -12,17 +12,17 @@ type Props = {
 };
 
 const AutomationsBreadCrumb = ({ id }: Props) => {
-  const { data } = useQueryAutomation(id);
-  const { edit, enableEdit, inputRef, isPending } = useEditAutomation(id);
+  // const { data } = useQueryAutomation(id);
+  // const { edit, enableEdit, inputRef, isPending } = useEditAutomation(id);
 
-  const { latestVariable } = useMutationDataState(["update-automation"]);
+  // const { latestVariable } = useMutationDataState(["update-automation"]);
 
   return (
     <div className="rounded-full w-full p-5 bg-[#18181B1A] flex items-center">
       <div className="flex items-center gap-x-3 min-w-0">
         <p className="text-[#9B9CA0] truncate">Automations</p>
         <ChevronRight className="flex-shrink-0" color="#9B9CA0" />
-        <span className="flex gap-x-3 items-center min-w-0">
+        {/* <span className="flex gap-x-3 items-center min-w-0">
           {edit ? (
             <Input
               ref={inputRef}
@@ -48,7 +48,7 @@ const AutomationsBreadCrumb = ({ id }: Props) => {
               <PencilIcon size={14} />
             </span>
           )}
-        </span>
+        </span> */}
       </div>
 
       <div className="flex items-center gap-x-5 ml-auto">
