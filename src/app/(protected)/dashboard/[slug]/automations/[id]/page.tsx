@@ -40,8 +40,8 @@ const Page = async ({ params }: Props) => {
           </div>
           <Trigger id={params.id} />
         </div>
-        {/* <ThenNode id={params.id} />
-        <PostNode id={params.id} /> */}
+        <ThenNode id={params.id} />
+        <PostNode id={params.id} />
       </div>
     </HydrationBoundary>
   );

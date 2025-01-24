@@ -72,14 +72,14 @@ export const updateAutomationName = async (
 };
 
 export const saveListener = async (
-  autmationId: string,
+  automationId: string,
   listener: "SMARTAI" | "MESSAGE",
   prompt: string,
   reply?: string
 ) => {
   await onCurrentUser();
   try {
-    const create = await addListener(autmationId, listener, prompt, reply);
+    const create = await addListener(automationId, listener, prompt, reply);
     if (create) return { status: 200, data: "Listener created" };
     return { status: 404, data: "Cant save listener" };
   } catch (error) {
@@ -134,6 +134,7 @@ export const getProfilePosts = async () => {
       `${process.env.INSTAGRAM_BASE_URL}/me/media?fields=id,caption,media_url,media_type,timestamp&limit=10&access_token=${profile?.integrations[0].token}`
     );
     const parsed = await posts.json();
+    console.log(parsed);
     if (parsed) return { status: 200, data: parsed };
     console.log("🔴 Error in getting posts");
     return { status: 404 };
