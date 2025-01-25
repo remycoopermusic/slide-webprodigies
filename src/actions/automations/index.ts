@@ -112,6 +112,7 @@ export const saveKeyword = async (automationId: string, keyword: string) => {
 };
 
 export const deleteKeyword = async (id: string) => {
+  console.log(id);
   await onCurrentUser();
   try {
     const deleted = await deleteKeywordQuery(id);
@@ -122,6 +123,7 @@ export const deleteKeyword = async (id: string) => {
       };
     return { status: 404, data: "Keyword not found" };
   } catch (error) {
+    console.log(error);
     return { status: 500, data: "Oops! something went wrong" };
   }
 };

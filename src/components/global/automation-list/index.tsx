@@ -24,7 +24,6 @@ const AutomationList = (props: Props) => {
     }
     return data || { data: [] };
   }, [latestVariable, data]);
-  console.log(data);
   if (data?.status !== 200 || data.data.length <= 0) {
     return (
       <div className="h-[70vh] flex justify-center items-center flex-col gap-y-3">
