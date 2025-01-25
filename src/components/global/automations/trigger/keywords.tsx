@@ -2,17 +2,18 @@ import { Input } from "@/components/ui/input";
 import { useKeywords } from "@/hooks/use-automations";
 import { useMutationDataState } from "@/hooks/use-mutation-data";
 import { useQueryAutomation } from "@/hooks/user-queries";
-import { X } from "lucide-react";
+import { Loader2, X } from "lucide-react";
 import React from "react";
 
 type Props = {
   id: string;
 };
-// TODOS: Implement delete keyword correctly and edit upon double click
+// TODOS: Implement delete keyword correctly ( also deleting state) and edit upon double click
 export const Keywords = ({ id }: Props) => {
   const { onValueChange, keyword, onKeyPress, deleteMutation } =
     useKeywords(id);
   const { latestVariable } = useMutationDataState(["add-keyword"]);
+  // const { latesDeleteVariable } = useMutationDataState(["delete-keyword"]);
   const { data } = useQueryAutomation(id);
 
   return (
@@ -38,8 +39,12 @@ export const Keywords = ({ id }: Props) => {
               )
           )}
         {latestVariable && latestVariable.status === "pending" && (
-          <div className="bg-background-90 flex items-center gap-x-2 capitalize text-text-secondary py-1 px-4 rounded-full">
-            {latestVariable.variables.keyword}
+          <div className="cursor-progress relative bg-background-90 flex items-center gap-x-2 capitalize text-text-secondary py-1 px-4 rounded-full">
+            <div className="absolute inset-0 bg-gray-500 opacity-50 rounded-full" />
+            <p>{latestVariable.variables.keyword}</p>
+            <span className="  text-white rounded-full ">
+              <Loader2 size={12} className="animate-spin" />
+            </span>
           </div>
         )}
         <Input
