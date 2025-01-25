@@ -62,12 +62,29 @@ export const sendPrivateMessage = async (
 
 export const generateTokens = async (code: string) => {
   try {
+    // Validate input
+    if (!code) {
+      throw new Error("Authorization code is required");
+    }
+
+    // Validate environment variables
+    const requiredEnvVars = [
+      "INSTAGRAM_CLIENT_ID",
+      "INSTAGRAM_CLIENT_SECRET",
+      "NEXT_PUBLIC_HOST_URL",
+      "INSTAGRAM_TOKEN_URL",
+      "INSTAGRAM_BASE_URL",
+    ];
+
+    requiredEnvVars.forEach((varName) => {
+      if (!process.env[varName]) {
+        throw new Error(`Missing required environment variable: ${varName}`);
+      }
+    });
+
     const insta_form = new FormData();
-    insta_form.append("client_id", process.env.INSTAGRAM_CLIENT_ID as string);
-    insta_form.append(
-      "client_secret",
-      process.env.INSTAGRAM_CLIENT_SECRET as string
-    );
+    insta_form.append("client_id", process.env.INSTAGRAM_CLIENT_ID!);
+    insta_form.append("client_secret", process.env.INSTAGRAM_CLIENT_SECRET!);
     insta_form.append("grant_type", "authorization_code");
     insta_form.append(
       "redirect_uri",
@@ -80,15 +97,43 @@ export const generateTokens = async (code: string) => {
       body: insta_form,
     });
 
+    if (!shortTokenRes.ok) {
+      const errorText = await shortTokenRes.text();
+      throw new Error(
+        `Token request failed: ${shortTokenRes.status} - ${errorText}`
+      );
+    }
+
     const token = await shortTokenRes.json();
 
-    const long_token_response = await axios.get(
-      `https://graph.instagram.com/access_token?grant_type=ig_exchange_token&client_secret=${process.env.INSTAGRAM_CLIENT_SECRET}&access_token=${token.access_token}`
+    if (!token || !token.access_token) {
+      throw new Error("Invalid token response");
+    }
+
+    // Check permissions (if required)
+    if (!token.permissions || token.permissions.length === 0) {
+      throw new Error("Insufficient permissions");
+    }
+
+    const longTokenResponse = await axios.get(
+      `${process.env.INSTAGRAM_BASE_URL}/access_token`,
+      {
+        params: {
+          grant_type: "ig_exchange_token",
+          client_secret: process.env.INSTAGRAM_CLIENT_SECRET,
+          access_token: token.access_token,
+        },
+      }
     );
 
-    return long_token_response.data;
+    return longTokenResponse.data;
   } catch (error) {
-    console.error("Error generating Instagram token:", error);
-    throw error;
+    console.error("Instagram Token Generation Error:", error);
+
+    if (error instanceof Error) {
+      throw error;
+    } else {
+      throw new Error("Unexpected error in token generation");
+    }
   }
 };
