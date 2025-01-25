@@ -20,6 +20,7 @@ export async function GET(req: NextRequest) {
 export async function POST(req: NextRequest) {
   const webhook_payload = await req.json();
   let matcher;
+  console.log("api hit");
   try {
     if (webhook_payload.entry[0].messaging) {
       matcher = await matchKeyword(
@@ -310,21 +311,21 @@ export async function POST(req: NextRequest) {
         {
           message: "No automation set / check if you have automation activated",
         },
-        { status: 404 }
+        { status: 200 }
       );
     }
     return NextResponse.json(
       {
         message: "No automation set / check if you have automation activated",
       },
-      { status: 404 }
+      { status: 200 }
     );
   } catch (error) {
     return NextResponse.json(
       {
         message: "Server error",
       },
-      { status: 500 }
+      { status: 200 }
     );
   }
 }
