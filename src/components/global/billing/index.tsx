@@ -5,6 +5,7 @@ import { useQueryUser } from "@/hooks/user-queries";
 
 type Props = {};
 
+/* TODO: implement downgrade, subscription manage and upgrade like in payment button */
 const Billing = (props: Props) => {
   const { data } = useQueryUser();
   return (
