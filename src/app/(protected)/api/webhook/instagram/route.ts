@@ -87,6 +87,7 @@ export async function POST(req: NextRequest) {
                 },
               ],
             });
+            console.log("answers?", smart_ai_message);
 
             if (smart_ai_message.choices[0].message.content) {
               const reciever = createChatHistory(
@@ -202,7 +203,8 @@ export async function POST(req: NextRequest) {
                   },
                 ],
               });
-              console.log(smart_ai_message);
+              console.log("answers?", smart_ai_message);
+
               if (smart_ai_message.choices[0].message.content) {
                 const reciever = createChatHistory(
                   automation.id,
