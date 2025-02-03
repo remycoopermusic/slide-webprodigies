@@ -35,20 +35,22 @@ export async function POST(req: NextRequest) {
     }
 
     if (matcher && matcher.automationId) {
-      console.log("Matched");
-      // We have a keyword matcher
+      console.log("Matched", webhook_payload.entry[0]);
 
       if (webhook_payload.entry[0].messaging) {
         const automation = await getKeywordAutomation(
           matcher.automationId,
           true
         );
+        console.log("Message", automation);
 
         if (automation && automation.trigger && automation.active) {
           if (
             automation.listener &&
             automation.listener.listener === "MESSAGE"
           ) {
+            console.log("MESSAGE", automation);
+
             const direct_message = await sendDM(
               webhook_payload.entry[0].id,
               webhook_payload.entry[0].messaging[0].sender.id,
@@ -74,6 +76,8 @@ export async function POST(req: NextRequest) {
             automation.listener.listener === "SMARTAI" &&
             automation.User?.subscription?.plan === "PRO"
           ) {
+            console.log("Smart AI", automation);
+
             const smart_ai_message = await openai.chat.completions.create({
               model: "gpt-4o-mini",
               messages: [
