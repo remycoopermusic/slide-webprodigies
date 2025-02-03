@@ -91,7 +91,6 @@ export const generateTokens = async (code: string) => {
       `${process.env.NEXT_PUBLIC_HOST_URL}/callback/instagram`
     );
     insta_form.append("code", code);
-    console.log(insta_form);
 
     const shortTokenRes = await fetch(process.env.INSTAGRAM_TOKEN_URL!, {
       method: "POST",
