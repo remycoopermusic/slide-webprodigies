@@ -8,7 +8,6 @@ type Props = {
 };
 
 const Page = async ({ searchParams: { code } }: Props) => {
-  console.log(code);
   if (code) {
     const user = await onIntegrate(code.split("#_")[0]);
     if (user.status === 200) {

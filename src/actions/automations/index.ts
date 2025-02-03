@@ -136,7 +136,6 @@ export const getProfilePosts = async () => {
       `${process.env.INSTAGRAM_BASE_URL}/me/media?fields=id,caption,media_url,media_type,timestamp&limit=10&access_token=${profile?.integrations[0].token}`
     );
     const parsed = await posts.json();
-    console.log(parsed);
     if (parsed) return { status: 200, data: parsed };
     console.log("🔴 Error in getting posts");
     return { status: 404 };
