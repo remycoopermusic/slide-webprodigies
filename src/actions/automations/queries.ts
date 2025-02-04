@@ -1,4 +1,5 @@
 "use server";
+"use server";
 
 import { client } from "@/lib/prisma";
 
@@ -13,6 +14,13 @@ export const createAutomation = async (clerkId: string, id?: string) => {
           ...(id && { id }),
         },
       },
+    },
+  });
+};
+export const deleteAutomation = async (id: string) => {
+  return await client.automation.delete({
+    where: {
+      id,
     },
   });
 };
@@ -130,6 +138,27 @@ export const addKeyWord = async (automationId: string, keyword: string) => {
       keywords: {
         create: {
           word: keyword,
+        },
+      },
+    },
+  });
+};
+export const editKeyWord = async (
+  automationId: string,
+  keyword: string,
+  keywordId: string
+) => {
+  return client.automation.update({
+    where: {
+      id: automationId,
+    },
+    data: {
+      keywords: {
+        update: {
+          where: { id: keywordId },
+          data: {
+            word: keyword,
+          },
         },
       },
     },

@@ -8,7 +8,9 @@ import {
   addPost,
   addTrigger,
   createAutomation,
+  deleteAutomation,
   deleteKeywordQuery,
+  editKeyWord,
   findAutomation,
   getAutomations,
   updateAutomation,
@@ -25,6 +27,22 @@ export const createAutomations = async (id?: string) => {
   } catch (error) {
     console.log(error);
     return { status: 500, data: "Internal server error" };
+  }
+};
+
+export const deleteAutomations = async (id: string) => {
+  await onCurrentUser();
+  try {
+    const deleted = await deleteAutomation(id);
+    if (deleted)
+      return {
+        status: 200,
+        data: "Automation deleted",
+      };
+    return { status: 404, data: "Automation not found" };
+  } catch (error) {
+    console.log(error);
+    return { status: 500, data: "Oops! something went wrong" };
   }
 };
 
@@ -112,7 +130,6 @@ export const saveKeyword = async (automationId: string, keyword: string) => {
 };
 
 export const deleteKeyword = async (id: string) => {
-  console.log(id);
   await onCurrentUser();
   try {
     const deleted = await deleteKeywordQuery(id);
@@ -121,6 +138,27 @@ export const deleteKeyword = async (id: string) => {
         status: 200,
         data: "Keyword deleted",
       };
+    return { status: 404, data: "Keyword not found" };
+  } catch (error) {
+    console.log(error);
+    return { status: 500, data: "Oops! something went wrong" };
+  }
+};
+
+export const editKeywords = async (
+  automationId: string,
+  keyword: string,
+  keywordId: string
+) => {
+  await onCurrentUser();
+  try {
+    const edited = await editKeyWord(automationId, keyword, keywordId);
+    if (edited) {
+      return {
+        status: 200,
+        data: `Keyword edited to ${keyword}`,
+      };
+    }
     return { status: 404, data: "Keyword not found" };
   } catch (error) {
     console.log(error);

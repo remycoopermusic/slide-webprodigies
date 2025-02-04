@@ -22,7 +22,7 @@ const Trigger = ({ id }: Props) => {
 
   if (data?.data && data?.data?.trigger.length > 0) {
     return (
-      <div className="flex flex-col ga-y-6 items-center">
+      <div className="flex flex-col gap-y-6 items-center">
         <ActiveTrigger
           type={data.data.trigger[0].type}
           keywords={data.data.keywords}

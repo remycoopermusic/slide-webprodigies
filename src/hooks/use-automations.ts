@@ -1,5 +1,6 @@
 import {
   createAutomations,
+  deleteAutomations,
   deleteKeyword,
   saveKeyword,
   saveListener,
@@ -22,6 +23,15 @@ export const useCreateAutomation = (id?: string) => {
   const { isPending, mutate } = useMutationData(
     ["create-automation"],
     () => createAutomations(id),
+    "user-automations"
+  );
+
+  return { isPending, mutate };
+};
+export const useDeleteAutomation = (id: string) => {
+  const { isPending, mutate } = useMutationData(
+    ["delete-automation"],
+    () => deleteAutomations(id),
     "user-automations"
   );
 
