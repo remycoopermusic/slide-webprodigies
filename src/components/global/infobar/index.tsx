@@ -62,7 +62,7 @@ const InfoBar = ({ slug }: Props) => {
               </div>
             </Sheet>
           </span>
-          <Search />
+          <Search slug={slug} />
           <CreateAutomation />
           <Notifications />
         </div>

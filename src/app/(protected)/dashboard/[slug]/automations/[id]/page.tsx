@@ -4,8 +4,8 @@ import ThenNode from "@/components/global/automations/then/node";
 import Trigger from "@/components/global/automations/trigger";
 import AutomationsBreadCrumb from "@/components/global/bread-crumbs/automations";
 import { Warning } from "@/icons";
-import { PrefetchUserAutomation } from "@/react-query/prefetch";
 
+import { PrefetchUserAutomation } from "@/react-query/prefetch";
 import {
   dehydrate,
   HydrationBoundary,
@@ -13,9 +13,10 @@ import {
 } from "@tanstack/react-query";
 
 import React from "react";
+import HamburgerMenu from "./_component.tsx/hamburger-menu";
 
 type Props = {
-  params: { id: string };
+  params: { id: string; slug: string };
 };
 
 export async function generateMetadata({ params }: { params: { id: string } }) {
@@ -32,7 +33,10 @@ const Page = async ({ params }: Props) => {
   return (
     <HydrationBoundary state={dehydrate(query)}>
       <div className=" flex flex-col items-center gap-y-20">
-        <AutomationsBreadCrumb id={params.id} />
+        <div className="flex w-full items-center justify-between">
+          <HamburgerMenu slug={params.slug} />
+          <AutomationsBreadCrumb id={params.id} />
+        </div>
         <div className="w-full lg:w-10/12 xl:w-6/12 p-5 rounded-xl flex flex-col bg-[#1D1D1D] gap-y-3">
           <div className="flex gap-x-2">
             <Warning />
