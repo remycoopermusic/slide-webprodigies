@@ -6,6 +6,7 @@ const nextConfig = {
     remotePatterns: [
       { protocol: "https", hostname: "scontent-sin6-4.cdninstagram.com" },
     ],
+    remotePatterns: [{ protocol: "https", hostname: "randomuser.me" }],
   },
 };
 
