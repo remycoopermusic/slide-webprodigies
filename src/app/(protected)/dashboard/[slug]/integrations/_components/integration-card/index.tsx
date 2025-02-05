@@ -14,9 +14,16 @@ type Props = {
 };
 
 const IntegrationCard = ({ description, icon, strategy, title }: Props) => {
+  const capitalize = (str: string) =>
+    str.charAt(0).toUpperCase() + str.slice(1).toLowerCase();
+
+  console.log(capitalize("strategy")); // "Strategy"
+
   const [ConfirmDialog, confirm] = useConfirm(
-    "Before you proceed.",
-    "Due to our app limitations, we strongly advise you to use clone instagram accounts to avoid unfortunate consequences"
+    "Before you proceed!",
+    `Due to our app limitations, we strongly advise you to use clone ${capitalize(
+      strategy
+    )} accounts to avoid unfortunate consequences`
   );
   const onInstaOAuth = async () => {
     const ok = await confirm();

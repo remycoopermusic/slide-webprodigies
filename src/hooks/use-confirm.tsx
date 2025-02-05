@@ -46,7 +46,7 @@ const useConfirm = (
             Cancel
           </Button>
 
-          <Button onClick={handleConfirm}>Confirm</Button>
+          <Button onClick={handleConfirm}>Proceed</Button>
         </DialogFooter>
       </DialogContent>
     </Dialog>
