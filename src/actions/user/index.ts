@@ -26,10 +26,12 @@ export const onBoardUser = async () => {
           found.integrations[0].expiresAt?.getTime()! - today.getTime();
 
         const days = Math.round(time_left / (1000 * 3600 * 24));
+        console.log(days, found.integrations);
         if (days < 5) {
           console.log("refresh");
 
           const refresh = await refreshToken(found.integrations[0].token);
+          console.log(refresh);
 
           const today = new Date();
           const expire_date = today.setDate(today.getDate() + 60);

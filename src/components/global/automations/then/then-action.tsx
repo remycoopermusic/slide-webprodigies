@@ -47,7 +47,11 @@ const ThenAction = ({ id }: Props) => {
                 {listener.icon}
                 <p>{listener.label}</p>
               </div>
-              <p>{listener.description}</p>
+              {isPro ? (
+                <p className="text-sm">{listener.description}</p>
+              ) : (
+                <p>(Upgrade to use this feature).</p>
+              )}
             </button>
           ) : (
             <button
@@ -65,7 +69,7 @@ const ThenAction = ({ id }: Props) => {
                 {listener.icon}
                 <p>{listener.label}</p>
               </div>
-              <p>{listener.description}</p>
+              <p className="text-sm">{listener.description}</p>
             </button>
           )
         )}
