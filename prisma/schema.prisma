@@ -23,6 +23,7 @@ model User {
   subscription Subscription?
   integrations Integrations[]
   automations  Automation[]
+  notification Notification[]
 }
 
 model Subscription {
@@ -106,6 +107,16 @@ model Keyword {
 
   @@unique([automationId, word]) //this constraints ensure user cant use the same keyword on multiple automations
 }
+
+model Notification {
+  id      String  @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  User    User?   @relation(fields: [userId], references: [id])
+  userId  String? @db.Uuid
+  isSeen Boolean @default(false)
+  content String
+  createdAt DateTime @default(now())
+}
+
 
 enum SUBSCRIPTION_PLAN {
   PRO
