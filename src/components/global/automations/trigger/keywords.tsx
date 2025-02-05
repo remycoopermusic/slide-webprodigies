@@ -4,10 +4,9 @@ import { Input } from "@/components/ui/input";
 import { useKeywords } from "@/hooks/use-automations";
 import { useMutationDataState } from "@/hooks/use-mutation-data";
 import { useQueryAutomation } from "@/hooks/user-queries";
-import { cn } from "@/lib/utils";
-import { Loader2, X } from "lucide-react";
+import { Loader2 } from "lucide-react";
 import React from "react";
-import { useEditKeyword } from "@/hooks/use-keyword";
+import KeywordItem from "./keyword-item";
 
 type Props = {
   id: string;
@@ -59,50 +58,6 @@ export const Keywords = ({ id }: Props) => {
           onKeyUp={onKeyPress}
         />
       </div>
-    </div>
-  );
-};
-
-interface KeywordItemProps {
-  word: {
-    id: string;
-    word: string;
-  };
-  automationId: string;
-  isDeleting: boolean;
-  onDelete: () => void;
-}
-
-const KeywordItem = ({
-  word,
-  automationId,
-  isDeleting,
-  onDelete,
-}: KeywordItemProps) => {
-  const { EditContainer, isPending } = useEditKeyword(
-    automationId,
-    word.id,
-    word.word
-  );
-
-  return (
-    <div
-      className={cn(
-        "group bg-background-90 flex items-center gap-x-2   text-text-secondary py-1 px-4 rounded-full relative",
-        isDeleting && "hidden",
-        isPending && "opacity-50"
-      )}
-    >
-      <EditContainer>
-        <p>{word.word}</p>
-      </EditContainer>
-      <button
-        className="group-hover:opacity-100 opacity-0 absolute top-0 right-0 rounded-full bg-red-500"
-        onClick={onDelete}
-        disabled={isPending}
-      >
-        <X className="text-white" size={12} />
-      </button>
     </div>
   );
 };

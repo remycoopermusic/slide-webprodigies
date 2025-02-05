@@ -6,15 +6,13 @@ import { editKeywords } from "@/actions/automations";
 import { Input } from "@/components/ui/input";
 import { useClickAway } from "@/hooks/use-click-away";
 
-// too many unexpected behaviors ( 1/ blur on value change , 2/ multiple edit query call unexpectedly)
-
 export const useEditKeyword = (
   automationId: string,
   keywordId: string,
   initialName: string
 ) => {
-  const [editKeywordName, setEditKeywordName] = useState(initialName);
   const [editMode, setEditMode] = useState(false);
+  const currentValue = useRef(initialName);
   const containerRef = useRef<HTMLDivElement | null>(null);
   const inputRef = useRef<HTMLInputElement | null>(null);
 
@@ -40,16 +38,21 @@ export const useEditKeyword = (
   }, [editMode]);
 
   const handleSave = () => {
-    if (editKeywordName.trim() !== initialName) {
+    const newValue = inputRef.current?.value || initialName;
+    if (newValue.trim() !== initialName) {
       mutate(
-        { name: editKeywordName },
+        { name: newValue },
         {
           onSuccess: () => {
             setEditMode(false);
+            currentValue.current = newValue;
           },
           onError: () => {
-            setEditKeywordName(initialName);
             setEditMode(false);
+            if (inputRef.current) {
+              inputRef.current.value = initialName;
+            }
+            currentValue.current = initialName;
           },
         }
       );
@@ -64,14 +67,17 @@ export const useEditKeyword = (
       handleSave();
     } else if (e.key === "Escape") {
       e.preventDefault();
-      setEditKeywordName(initialName);
       setEditMode(false);
+      if (inputRef.current) {
+        inputRef.current.value = initialName;
+      }
+      currentValue.current = initialName;
     }
   };
 
   const EditContainer = ({ children }: { children: ReactNode }) => {
     const inputWidth =
-      Math.min(Math.max(editKeywordName.length || 10, 2), 50) + 1;
+      Math.min(Math.max(currentValue.current.length || 10, 2), 50) + 1;
 
     return (
       <div
@@ -86,12 +92,8 @@ export const useEditKeyword = (
         {editMode ? (
           <Input
             ref={inputRef}
-            value={editKeywordName}
-            onBlur={() => console.log("Input blurred")}
-            onChange={(e) => {
-              setEditKeywordName(e.target.value);
-            }}
-            onKeyUp={handleKeyDown}
+            defaultValue={currentValue.current}
+            onKeyDown={handleKeyDown}
             style={{
               width: `${inputWidth}ch`,
               maxWidth: "50ch",
@@ -110,6 +112,6 @@ export const useEditKeyword = (
     EditContainer,
     isEditing: editMode,
     isPending,
-    currentValue: editKeywordName,
+    currentValue: currentValue.current,
   };
 };
