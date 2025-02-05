@@ -8,6 +8,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import Loader from "../../loader";
+import { useQueryUser } from "@/hooks/user-queries";
 
 type Props = {
   id: string;
@@ -21,36 +22,39 @@ const ThenAction = ({ id }: Props) => {
     register,
     isPending,
   } = useListener(id);
+  const { data } = useQueryUser();
+  let isPro = data?.data?.subscription?.plan === "PRO";
 
   return (
     <TriggerButton label="Then">
-      <div className="flex flex-col gap-y-2 ">
+      <div className="flex flex-col gap-y-2  ">
         {AUTOMATION_LISTENERS.map((listener) =>
           listener.type === "SMARTAI" ? (
-            // /* TODO: disabled and tell the user to upgrade instead */
-            <SubscriptionPlan key={listener.type} type="PRO">
-              <div
-                onClick={() => onSetListener(listener.type)}
-                key={listener.id}
-                className={cn(
-                  Listener === listener.type
-                    ? "bg-gradient-to-br from-[#3352CC] to-[#1C2D70]"
-                    : "bg-background-80",
-                  "p-3 rounded-xl flex flex-col gap-y-2 cursor-pointer hover:opacity-80 transition duration-100"
-                )}
-              >
-                <div className="flex gap-x-2 items-center">
-                  {listener.icon}
-                  <p>{listener.label}</p>
-                </div>
-                <p>{listener.description}</p>
+            <button
+              onClick={() => onSetListener(listener.type)}
+              key={listener.id}
+              disabled={!isPro}
+              className={cn(
+                "text-left",
+                Listener === listener.type
+                  ? "bg-gradient-to-br from-[#3352CC] to-[#1C2D70]"
+                  : "bg-background-80",
+                "p-3 rounded-xl flex flex-col gap-y-2 cursor-pointer hover:opacity-80 transition duration-100",
+                !isPro && "cursor-not-allowed"
+              )}
+            >
+              <div className="flex gap-x-2 items-center">
+                {listener.icon}
+                <p>{listener.label}</p>
               </div>
-            </SubscriptionPlan>
+              <p>{listener.description}</p>
+            </button>
           ) : (
-            <div
+            <button
               onClick={() => onSetListener(listener.type)}
               key={listener.id}
               className={cn(
+                "text-left",
                 Listener === listener.type
                   ? "bg-gradient-to-br from-[#3352CC] to-[#1C2D70]"
                   : "bg-background-80",
@@ -62,7 +66,7 @@ const ThenAction = ({ id }: Props) => {
                 <p>{listener.label}</p>
               </div>
               <p>{listener.description}</p>
-            </div>
+            </button>
           )
         )}
         <form onSubmit={onFormSubmit} className="flex flex-col gap-y-2">

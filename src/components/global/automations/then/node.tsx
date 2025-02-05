@@ -42,7 +42,7 @@ const ThenNode = ({ id }: Props) => {
               : "Let Smart AI take over"}
           </p>
         </div>
-        <p className="flont-light text-text-secondary">
+        <p className="font-light text-text-secondary">
           {data.data.listener.prompt}
         </p>
       </div>
