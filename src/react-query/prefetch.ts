@@ -15,6 +15,20 @@ const prefetch = async (
   });
 };
 
+const prefetchInfinite = async (
+  client: QueryClient,
+  action: QueryFunction,
+  key: string
+) => {
+  return await client.prefetchInfiniteQuery({
+    queryKey: [key],
+    queryFn: action,
+    initialPageParam: null,
+    getNextPageParam: (lastPage: any) => lastPage.nextCursor,
+    staleTime: 60000,
+  });
+};
+
 export const PrefetchUserProfile = async (client: QueryClient) => {
   return await prefetch(client, onUserInfo, "user-profile");
 };
@@ -22,8 +36,13 @@ export const PrefetchUserProfile = async (client: QueryClient) => {
 export const PrefetchUserAutomations = async (client: QueryClient) => {
   return await prefetch(client, getAllAutomations, "user-automations");
 };
+
 export const PrefetchUserNotifications = async (client: QueryClient) => {
-  return await prefetch(client, getNotification, "user-notifications");
+  return await prefetchInfinite(
+    client,
+    () => getNotification(undefined),
+    "user-notifications"
+  );
 };
 
 export const PrefetchUserAutomation = async (

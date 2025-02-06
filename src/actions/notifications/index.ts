@@ -1,3 +1,4 @@
+"use server";
 import { onCurrentUser } from "../user";
 import {
   deleteNotifications,
@@ -5,11 +6,16 @@ import {
   markAsReadNotifications,
 } from "./queries";
 
-export const getNotification = async () => {
+export const getNotification = async (cursor?: string) => {
   const user = await onCurrentUser();
   try {
-    const notifications = await getNotifications(user.id);
-    if (notifications) return { status: 200, data: notifications };
+    const notifications = await getNotifications(user.id, cursor);
+    if (notifications)
+      return {
+        status: 200,
+        data: notifications,
+        nextCursor: notifications.notification[4]?.id || null, // Get the last item's ID as next cursor
+      };
 
     return { status: 404 };
   } catch (error) {

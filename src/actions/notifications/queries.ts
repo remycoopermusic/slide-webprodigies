@@ -1,12 +1,20 @@
+"use server";
 import { client } from "@/lib/prisma";
 
-export const getNotifications = async (clerkId: string) => {
+export const getNotifications = async (clerkId: string, cursor?: string) => {
   return await client.user.findUnique({
     where: {
       clerkId,
     },
     include: {
       notification: {
+        take: 5,
+        ...(cursor && {
+          skip: 1,
+          cursor: {
+            id: cursor,
+          },
+        }),
         orderBy: {
           createdAt: "desc",
         },
