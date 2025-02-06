@@ -6,12 +6,14 @@ import React from "react";
 import { toast } from "sonner";
 import { format } from "date-fns";
 import { cn } from "@/lib/utils";
+import { useRouter } from "next/navigation";
 
 type Props = {
   notification: Notification;
 };
 
 const NotificationItem = ({ notification }: Props) => {
+  const router = useRouter();
   const { deleteMutation, isDeleting, isMarking, markAsSeen } =
     useNotificationsMutation(notification.id);
 
@@ -20,7 +22,7 @@ const NotificationItem = ({ notification }: Props) => {
       key={notification.id}
       className={cn(
         "group bg-[#1C1C1C] hover:bg-[#252525] transition-colors border border-gray-800 hover:border-gray-700 rounded-lg p-4",
-        isDeleting && "hidden"
+        isDeleting && "opacity-50"
       )}
     >
       <div className="flex justify-between items-start gap-4">
@@ -31,14 +33,23 @@ const NotificationItem = ({ notification }: Props) => {
             </h3>
             {!notification.isSeen && (
               <button
-                onClick={() => markAsSeen({ id: notification.id })}
+                onClick={() =>
+                  markAsSeen(
+                    { id: notification.id },
+                    {
+                      onSuccess: () => {
+                        router.refresh();
+                      },
+                    }
+                  )
+                }
                 disabled={isMarking}
                 className="px-2 py-0.5 text-[10px] font-medium bg-blue-500/10 hover:bg-blue-500/20 text-blue-400 rounded-full transition-colors"
               >
                 {isMarking ? (
                   <Loader className="animate-spin" size={12} />
                 ) : (
-                  "UNREAD"
+                  "mark as read"
                 )}
               </button>
             )}
@@ -67,7 +78,14 @@ const NotificationItem = ({ notification }: Props) => {
             size="icon"
             className="h-8 w-8 text-gray-400 hover:text-white hover:bg-gray-800"
             onClick={() => {
-              deleteMutation({ id: notification.id });
+              deleteMutation(
+                { id: notification.id },
+                {
+                  onSuccess: () => {
+                    router.refresh();
+                  },
+                }
+              );
             }}
           >
             <Trash2 className="h-4 w-4" />

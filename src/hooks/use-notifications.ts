@@ -52,11 +52,11 @@ export const useNotifications = () => {
   });
 
   const notifications =
-    data?.pages.flatMap((page) => page.data?.notification ?? []) ?? [];
+    data?.pages.flatMap((page: any) => page.data ?? []) ?? [];
+  console.log(notifications);
 
   return {
     notifications: notifications as Notification[],
-
     fetchNextPage,
     hasNextPage,
     isFetchingNextPage,
@@ -69,13 +69,17 @@ export const useNotificationsMutation = (notificationId: string) => {
   const { isPending: isDeleting, mutate: deleteMutation } = useMutationData(
     ["delete-notification"],
     () => deleteNotification(notificationId),
-    "user-notifications"
+    "user-notifications",
+    () => {},
+    false
   );
 
   const { isPending: isMarking, mutate: markAsSeen } = useMutationData(
     ["read-notification"],
     () => markNotificationAsRead(notificationId),
-    "user-notifications"
+    "user-notifications",
+    () => {},
+    false
   );
 
   return {

@@ -2,6 +2,7 @@ import { useNotificationsMutation } from "@/hooks/use-notifications";
 import { Notification } from "@prisma/client";
 import { format } from "date-fns";
 import { Trash2 } from "lucide-react";
+import { useRouter } from "next/navigation";
 import React from "react";
 
 type Props = {
@@ -9,6 +10,7 @@ type Props = {
 };
 
 const NotificationItem = ({ notification }: Props) => {
+  const router = useRouter();
   const { deleteMutation, isDeleting, isMarking, markAsSeen } =
     useNotificationsMutation(notification.id);
 
@@ -24,14 +26,28 @@ const NotificationItem = ({ notification }: Props) => {
       } ${isMarking ? "opacity-50" : ""}`}
       onClick={() => {
         if (!notification.isSeen) {
-          markAsSeen({ id: notification.id });
+          markAsSeen(
+            { id: notification.id },
+            {
+              onSuccess: () => {
+                router.refresh();
+              },
+            }
+          );
         }
       }}
     >
       <button
         onClick={(e) => {
           e.stopPropagation(); // Prevent triggering the parent onClick
-          deleteMutation({ id: notification.id });
+          deleteMutation(
+            { id: notification.id },
+            {
+              onSuccess: () => {
+                router.refresh();
+              },
+            }
+          );
         }}
         className="absolute bottom-4 right-4 opacity-0 group-hover:opacity-100 transition-opacity duration-200 hover:text-destructive"
       >

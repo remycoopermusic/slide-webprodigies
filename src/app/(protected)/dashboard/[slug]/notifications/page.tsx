@@ -16,6 +16,7 @@ import { Button } from "@/components/ui/button";
 export default function NotificationsPage() {
   const { notifications, fetchNextPage, isFetchingNextPage, hasNextPage } =
     useNotifications();
+
   const [sortOrder, setSortOrder] = useState<"desc" | "asc">("desc");
 
   const sortedNotifications = [...(notifications || [])].sort((a, b) => {

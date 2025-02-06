@@ -1,24 +1,20 @@
 "use server";
 import { client } from "@/lib/prisma";
 
-export const getNotifications = async (clerkId: string, cursor?: string) => {
-  return await client.user.findUnique({
+export const getNotifications = async (userId: string, cursor?: string) => {
+  return await client.notification.findMany({
     where: {
-      clerkId,
+      userId,
     },
-    include: {
-      notification: {
-        take: 5,
-        ...(cursor && {
-          skip: 1,
-          cursor: {
-            id: cursor,
-          },
-        }),
-        orderBy: {
-          createdAt: "desc",
-        },
+    take: 8,
+    ...(cursor && {
+      skip: 1,
+      cursor: {
+        id: cursor,
       },
+    }),
+    orderBy: {
+      createdAt: "desc",
     },
   });
 };
@@ -36,6 +32,15 @@ export const markAsReadNotifications = async (notificationId: string) => {
     },
     data: {
       isSeen: true,
+    },
+  });
+};
+
+export const createNotifications = async (content: string, userId: string) => {
+  return await client.notification.create({
+    data: {
+      content,
+      userId,
     },
   });
 };
