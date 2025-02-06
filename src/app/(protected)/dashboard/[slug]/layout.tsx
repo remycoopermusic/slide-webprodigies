@@ -10,6 +10,7 @@ import {
   PrefetchUserAutomations,
   PrefetchUserNotifications,
   PrefetchUserProfile,
+  PrefetchUserAnalytics,
 } from "@/react-query/prefetch";
 
 type Props = {
@@ -25,6 +26,8 @@ const Layout = async ({ children, params }: Props) => {
   await PrefetchUserAutomations(query);
 
   await PrefetchUserNotifications(query);
+
+  await PrefetchUserAnalytics(query, params.slug);
 
   return (
     <HydrationBoundary state={dehydrate(query)}>

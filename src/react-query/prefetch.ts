@@ -2,6 +2,7 @@ import { onUserInfo } from "@/actions/user";
 import { getAllAutomations, getAutomationInfo } from "@/actions/automations";
 import { QueryClient, QueryFunction } from "@tanstack/react-query";
 import { getNotification } from "@/actions/notifications";
+import { getUserAnalytics } from "@/actions/analytics";
 
 const prefetch = async (
   client: QueryClient,
@@ -54,4 +55,11 @@ export const PrefetchUserAutomation = async (
     () => getAutomationInfo(automationId),
     "automation-info"
   );
+};
+
+export const PrefetchUserAnalytics = async (
+  client: QueryClient,
+  slug: string
+) => {
+  return await prefetch(client, () => getUserAnalytics(slug), "user-analytics");
 };

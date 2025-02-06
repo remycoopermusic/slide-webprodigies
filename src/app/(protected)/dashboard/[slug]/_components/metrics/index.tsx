@@ -1,49 +1,44 @@
-'use client'
-import { Card, CardContent } from '@/components/ui/card'
+"use client";
+import { Card, CardContent } from "@/components/ui/card";
 import {
   ChartContainer,
   ChartTooltip,
   ChartTooltipContent,
-} from '@/components/ui/chart'
-import React from 'react'
+} from "@/components/ui/chart";
+import React from "react";
 import {
   Area,
   AreaChart,
   CartesianGrid,
   ResponsiveContainer,
   XAxis,
-} from 'recharts'
-
-type Props = {}
-
-const chartData = [
-  { month: 'January', desktop: 86 },
-  { month: 'February', desktop: 50 },
-  { month: 'March', desktop: 37 },
-  { month: 'April', desktop: 73 },
-  { month: 'May', desktop: 29 },
-  { month: 'June', desktop: 14 },
-]
+} from "recharts";
+import { useAnalytics } from "@/hooks/use-analytics";
+import { useParams } from "next/navigation";
 
 const chartConfig = {
-  desktop: {
-    label: 'Desktop',
-    color: 'hsl(var(--chart-1))',
+  activity: {
+    label: "Activity",
+    color: "hsl(var(--chart-1))",
   },
-}
+};
 
-const Chart = (props: Props) => {
+const Chart = () => {
+  const params = useParams();
+  const { data: analytics, isLoading } = useAnalytics(params.slug as string);
+
+  if (isLoading) {
+    return <div>Loading...</div>;
+  }
+
   return (
     <Card className="border-none p-0">
       <CardContent className="p-0">
-        <ResponsiveContainer
-          height={300}
-          width={'100%'}
-        >
+        <ResponsiveContainer height={300} width={"100%"}>
           <ChartContainer config={chartConfig}>
             <AreaChart
               accessibilityLayer
-              data={chartData}
+              data={analytics?.data?.chartData || []}
               margin={{
                 left: 12,
                 right: 12,
@@ -51,7 +46,7 @@ const Chart = (props: Props) => {
             >
               <CartesianGrid vertical={false} />
               <XAxis
-                dataKey="month"
+                dataKey="date"
                 tickLine={false}
                 axisLine={false}
                 tickMargin={8}
@@ -62,7 +57,7 @@ const Chart = (props: Props) => {
                 content={<ChartTooltipContent indicator="line" />}
               />
               <Area
-                dataKey="desktop"
+                dataKey="activity"
                 type="natural"
                 fill="var(--color-desktop)"
                 fillOpacity={0.4}
@@ -73,7 +68,7 @@ const Chart = (props: Props) => {
         </ResponsiveContainer>
       </CardContent>
     </Card>
-  )
-}
+  );
+};
 
-export default Chart
+export default Chart;
