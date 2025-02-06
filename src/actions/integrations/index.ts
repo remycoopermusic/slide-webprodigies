@@ -1,10 +1,16 @@
 "use server";
 
 import { redirect } from "next/navigation";
-import { onCurrentUser } from "../user";
-import { createIntegration, getIntegration } from "./queries";
+import { onCurrentUser, onUserInfo } from "../user";
+import {
+  createIntegration,
+  deleteIntegration,
+  getIntegration,
+} from "./queries";
 import { generateTokens } from "@/lib/fetch";
 import axios from "axios";
+import { createNotification } from "../notifications";
+import { capitalize } from "@/lib/utils";
 
 export const onOAuthInstagram = (strategy: "INSTAGRAM" | "CRM") => {
   if (strategy === "INSTAGRAM") {
@@ -34,12 +40,37 @@ export const onIntegrate = async (code: string) => {
           new Date(expire_date),
           insta_id.data.user_id
         );
+        createNotification(
+          "you have integrated to your Instagram account",
+          create.id
+        );
         return { status: 200, data: create };
       }
       console.log("🔴 401");
       return { status: 401 };
     }
     console.log("🔴 404");
+    return { status: 404 };
+  } catch (error) {
+    console.log("🔴 500", error);
+    return { status: 500 };
+  }
+};
+
+export const disconnectIntegrate = async (integrationId: string) => {
+  const user = await onUserInfo();
+  try {
+    const integration = await deleteIntegration(integrationId, user.data!.id);
+    if (integration && integration.userId) {
+      const integrationName = capitalize(integration.name);
+      createNotification(
+        `you have unintegrated your ${integrationName} account`,
+        integration.userId
+      );
+      return { status: 200, data: "unintegrated successfully" };
+    }
+    console.log("🔴 404");
+
     return { status: 404 };
   } catch (error) {
     console.log("🔴 500", error);

@@ -1,9 +1,13 @@
 "use client";
-import { onOAuthInstagram } from "@/actions/integrations";
+import { disconnectIntegrate, onOAuthInstagram } from "@/actions/integrations";
 import { onUserInfo } from "@/actions/user";
 import { Button } from "@/components/ui/button";
 import useConfirm from "@/hooks/use-confirm";
+import { useMutationData } from "@/hooks/use-mutation-data";
+import { capitalize } from "@/lib/utils";
 import { useQuery } from "@tanstack/react-query";
+import { Loader } from "lucide-react";
+import { useRouter } from "next/navigation";
 import React from "react";
 
 type Props = {
@@ -14,10 +18,7 @@ type Props = {
 };
 
 const IntegrationCard = ({ description, icon, strategy, title }: Props) => {
-  const capitalize = (str: string) =>
-    str.charAt(0).toUpperCase() + str.slice(1).toLowerCase();
-
-  console.log(capitalize("strategy")); // "Strategy"
+  const router = useRouter();
 
   const [ConfirmDialog, confirm] = useConfirm(
     "Before you proceed!",
@@ -36,6 +37,14 @@ const IntegrationCard = ({ description, icon, strategy, title }: Props) => {
     queryFn: onUserInfo,
   });
 
+  const { mutate, isPending: isDeleting } = useMutationData(
+    ["update-keyword"],
+    async (data: { id: string }) => {
+      return await disconnectIntegrate(data.id);
+    },
+    "automation-info"
+  );
+
   const integrated = data?.data?.integrations.find(
     (integration) => integration.name === strategy
   );
@@ -49,13 +58,33 @@ const IntegrationCard = ({ description, icon, strategy, title }: Props) => {
           <h3 className="text-xl"> {title}</h3>
           <p className="text-[#9D9D9D] text-base ">{description}</p>
         </div>
-        <Button
-          onClick={onInstaOAuth}
-          disabled={integrated?.name === strategy}
-          className="bg-gradient-to-br text-white rounded-full text-lg from-[#3352CC] font-medium to-[#1C2D70] hover:opacity-70 transition duration-100"
-        >
-          {integrated ? "Connected" : "Connect"}
-        </Button>
+        {integrated ? (
+          <Button
+            onClick={() => {
+              mutate(
+                { id: integrated.id },
+                {
+                  onSuccess: () => router.refresh(),
+                }
+              );
+            }}
+            disabled={isDeleting}
+            className="bg-gradient-to-br text-white rounded-full text-lg from-[#3352CC] font-medium to-[#1C2D70] hover:opacity-70 transition duration-100"
+          >
+            {isDeleting ? (
+              <Loader size={16} className="animate-spin" />
+            ) : (
+              "Disconnect"
+            )}
+          </Button>
+        ) : (
+          <Button
+            onClick={onInstaOAuth}
+            className="bg-gradient-to-br text-white rounded-full text-lg from-[#3352CC] font-medium to-[#1C2D70] hover:opacity-70 transition duration-100"
+          >
+            Connect
+          </Button>
+        )}
       </div>
     </>
   );

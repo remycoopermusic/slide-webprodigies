@@ -1,6 +1,7 @@
 "use server";
 
 import { currentUser } from "@clerk/nextjs/server";
+import { createNotification } from "@/actions/notifications";
 
 import { redirect } from "next/navigation";
 import { createUser, findUser, updateSubscription } from "./queries";
@@ -43,6 +44,11 @@ export const onBoardUser = async () => {
           );
           if (!update_token) {
             console.log("Update token failed");
+          } else if (update_token.userId) {
+            createNotification(
+              "You have been reintegrated!",
+              update_token.userId
+            );
           }
         }
       }
@@ -90,7 +96,10 @@ export const onSubscribe = async (session_id: string) => {
         plan: "PRO",
       });
 
-      if (subscribed) return { status: 200 };
+      if (subscribed) {
+        createNotification("You have subscribed to pro!", subscribed.id);
+        return { status: 200 };
+      }
       return { status: 401 };
     }
     return { status: 404 };
