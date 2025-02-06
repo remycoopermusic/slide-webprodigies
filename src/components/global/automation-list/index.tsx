@@ -19,12 +19,12 @@ const AutomationList = (props: Props) => {
 
   const optimisticUiData = useMemo(() => {
     if (latestVariable && latestVariable?.variables && data) {
-      const test = [latestVariable.variables, ...data.data];
-      return { data: test };
+      const test = new Set([latestVariable.variables, ...data.data]);
+      return { data: Array.from(test) };
     }
     return data || { data: [] };
   }, [latestVariable, data]);
-  if (data?.status !== 200 || data.data.length <= 0) {
+  if (data?.status !== 200 || optimisticUiData.data.length <= 0) {
     return (
       <div className="h-[70vh] flex justify-center items-center flex-col gap-y-3">
         <h3 className="text-lg text-gray-400">No Automations </h3>

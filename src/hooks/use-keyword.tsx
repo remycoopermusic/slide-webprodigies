@@ -76,9 +76,6 @@ export const useEditKeyword = (
   };
 
   const EditContainer = ({ children }: { children: ReactNode }) => {
-    const inputWidth =
-      Math.min(Math.max(currentValue.current.length || 10, 2), 50) + 1;
-
     return (
       <div
         ref={containerRef}
@@ -94,11 +91,7 @@ export const useEditKeyword = (
             ref={inputRef}
             defaultValue={currentValue.current}
             onKeyDown={handleKeyDown}
-            style={{
-              width: `${inputWidth}ch`,
-              maxWidth: "50ch",
-            }}
-            className="p-0 bg-transparent ring-0 border-none outline-none"
+            className="p-2 bg-transparent ring-0 border-none outline-none field-sizing-content"
             disabled={isPending}
           />
         ) : (
