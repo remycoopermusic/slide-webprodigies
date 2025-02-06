@@ -27,7 +27,6 @@ export const onBoardUser = async () => {
           found.integrations[0].expiresAt?.getTime()! - today.getTime();
 
         const days = Math.round(time_left / (1000 * 3600 * 24));
-        console.log(days, found.integrations);
         if (days < 5) {
           console.log("refresh");
 

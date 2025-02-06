@@ -31,7 +31,6 @@ export const getMonth = (month: number) => {
 };
 
 export const duplicateValidation = (arr: string[], el: string) => {
-  console.log(arr, el);
   if (!arr.find((t) => t === el)) {
     arr.push(el);
     return arr;

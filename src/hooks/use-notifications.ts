@@ -53,7 +53,6 @@ export const useNotifications = () => {
 
   const notifications =
     data?.pages.flatMap((page: any) => page.data ?? []) ?? [];
-  console.log(notifications);
 
   return {
     notifications: notifications as Notification[],
