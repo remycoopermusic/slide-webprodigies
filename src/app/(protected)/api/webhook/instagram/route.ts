@@ -270,8 +270,11 @@ export async function POST(req: NextRequest) {
         webhook_payload.entry[0].messaging[0].sender.id
       );
 
-      if (customer_history.history.length > 0) {
-        const automation = await findAutomation(customer_history.automationId!);
+      if (
+        customer_history.history.length > 0 &&
+        customer_history.automationId
+      ) {
+        const automation = await findAutomation(customer_history.automationId);
 
         if (
           automation?.User?.subscription?.plan === "PRO" &&
