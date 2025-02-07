@@ -200,7 +200,7 @@ export const savePosts = async (
 
     if (create) {
       createNotification(
-        `You have been attached your posts to automation ${create.name}!`,
+        `Your posts have been attached to automation ${create.name}!`,
         create.userId!
       );
       return { status: 200, data: "Posts attached" };

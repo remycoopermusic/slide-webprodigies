@@ -26,9 +26,43 @@ const chartConfig = {
 const Chart = () => {
   const params = useParams();
   const { data: analytics, isLoading } = useAnalytics(params.slug as string);
+  console.log(analytics);
 
   if (isLoading) {
-    return <div>Loading...</div>;
+    return (
+      <Card className="border-none p-0">
+        <CardContent className="p-0">
+          <ResponsiveContainer height={300} width={"100%"}>
+            <AreaChart
+              data={Array.from({ length: 7 }, (_, i) => ({
+                date: `Day ${i + 1}`,
+                activity: Math.random() * 50 + 25,
+              }))}
+              margin={{
+                left: 12,
+                right: 12,
+              }}
+            >
+              <CartesianGrid vertical={false} />
+              <XAxis
+                dataKey="date"
+                tickLine={false}
+                axisLine={false}
+                tickMargin={8}
+                tickFormatter={(value) => value.slice(0, 3)}
+              />
+              <Area
+                dataKey="activity"
+                type="natural"
+                fill="hsl(var(--muted))"
+                fillOpacity={0.4}
+                stroke="hsl(var(--muted))"
+              />
+            </AreaChart>
+          </ResponsiveContainer>
+        </CardContent>
+      </Card>
+    );
   }
 
   return (

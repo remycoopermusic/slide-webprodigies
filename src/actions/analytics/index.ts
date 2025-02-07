@@ -23,10 +23,12 @@ export const getUserAnalytics = async (slug: string) => {
         },
       },
     });
+    const formattedSlug = decodeURIComponent(slug).replace(/\s+/g, " ").trim();
+    const fullName = `${dbUser?.firstname}${dbUser?.lastname}`.trim();
 
     // Security check - verify user owns this dashboard
-    if (!dbUser || dbUser.id !== slug) {
-      redirect("/dashboard");
+    if (!dbUser || formattedSlug !== fullName) {
+      return { status: 404 };
     }
 
     const totalDms = dbUser.automations.reduce(

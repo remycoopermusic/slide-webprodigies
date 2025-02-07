@@ -8,7 +8,28 @@ const MetricsCard = () => {
   const { data: analytics, isLoading } = useAnalytics(params.slug as string);
 
   if (isLoading) {
-    return <div>Loading...</div>;
+    return (
+      <div className="h-full flex lg:flex-row flex-col gap-5 items-end">
+        {[
+          { title: "Comments", subtitle: "On your posts" },
+          { title: "Direct Messages", subtitle: "On your account" },
+        ].map((item, i) => (
+          <div
+            key={i}
+            className="p-5 border-[1px] flex flex-col gap-y-20 rounded-xl w-full lg:w-6/12"
+          >
+            <div>
+              <h2 className="text-3xl text-white font-bold">{item.title}</h2>
+              <p className="text-sm text-text-secondary">{item.subtitle}</p>
+            </div>
+            <div>
+              <div className="h-9 w-24 bg-muted rounded-md animate-pulse" />
+              <div className="h-5 w-48 bg-muted rounded-md mt-2 animate-pulse" />
+            </div>
+          </div>
+        ))}
+      </div>
+    );
   }
 
   const { totalComments, totalDms } = analytics?.data || {
