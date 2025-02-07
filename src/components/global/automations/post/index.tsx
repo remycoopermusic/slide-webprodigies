@@ -42,8 +42,7 @@ const PostButton = ({ id }: Props) => {
                     className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 z-50"
                   />
                 )}
-                <Image
-                  fill
+                <img
                   sizes="100vw"
                   src={post.media_url}
                   alt="post image"

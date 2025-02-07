@@ -39,7 +39,7 @@ const PostNode = ({ id }: Props) => {
                 key={post.id}
                 className="relative w-4/12 aspect-square rounded-lg cursor-pointer overflow-hidden"
               >
-                <Image fill sizes="100vw" src={post.media} alt="post image" />
+                <img sizes="100vw" src={post.media} alt="post image" />
               </div>
             ))}
           </div>
