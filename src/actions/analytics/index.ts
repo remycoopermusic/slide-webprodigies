@@ -74,23 +74,31 @@ export const trackAnalytics = async (
       },
     });
 
-    const analytics = await client.analytics.upsert({
-      where: {
-        id: existingAnalytics?.id || "",
-      },
-      create: {
-        userId,
-        date: today,
-        [type === "dm" ? "dmCount" : "commentCount"]: 1,
-      },
-      update: {
-        [type === "dm" ? "dmCount" : "commentCount"]: {
-          increment: 1,
+    if (existingAnalytics) {
+      // Update existing record
+      const analytics = await client.analytics.update({
+        where: {
+          id: existingAnalytics.id,
         },
-      },
-    });
-
-    return { status: 200, data: analytics };
+        data: {
+          [type === "dm" ? "dmCount" : "commentCount"]: {
+            increment: 1,
+          },
+        },
+      });
+      return { status: 200, data: analytics };
+    } else {
+      // Create new record
+      const analytics = await client.analytics.create({
+        data: {
+          userId,
+          date: today,
+          dmCount: type === "dm" ? 1 : 0,
+          commentCount: type === "comment" ? 1 : 0,
+        },
+      });
+      return { status: 200, data: analytics };
+    }
   } catch (error) {
     console.error("Analytics tracking error:", error);
     return { status: 500, data: null };
