@@ -115,6 +115,7 @@ export const generateTokens = async (code: string) => {
       throw new Error("Insufficient permissions");
     }
 
+    console.log(token);
     const longTokenResponse = await axios.get(
       `${process.env.INSTAGRAM_BASE_URL}/access_token`,
       {
