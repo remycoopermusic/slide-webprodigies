@@ -175,3 +175,19 @@
 .field-sizing-content {
   field-sizing: content;
 }
+
+.scrollbar-thumb {
+  background-color: rgba(189, 189, 189, 0.5); /* Light gray with transparency */
+  border-radius: 6px;
+  transition: all 0.2s ease;
+  border: 2px solid transparent; /* Creates padding effect */
+  background-clip: padding-box; /* Ensures border doesn't affect background */
+}
+
+.scrollbar-thumb:hover {
+  background-color: rgba(158, 158, 158, 0.7); /* Slightly darker on hover */
+}
+
+.scrollbar-thumb:active {
+  background-color: rgba(117, 117, 117, 0.8); /* Darkest when clicking */
+}

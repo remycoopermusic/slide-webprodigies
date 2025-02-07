@@ -10,8 +10,6 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
-import { ScrollArea } from "@/components/ui/scroll-area";
-import { format } from "date-fns";
 import { useRouter } from "next/navigation";
 import NotificationItem from "../notification-item";
 
@@ -35,7 +33,7 @@ export const Notifications = ({ slug }: { slug: string }) => {
           ) : null}
         </Button>
       </PopoverTrigger>
-      <PopoverContent className="w-[400px] shadow-border rounded-md p-0 shadow-lg border border-border bg-background">
+      <PopoverContent className="w-[350px] shadow-border rounded-md p-0 shadow-md border border-border bg-background">
         <div className="flex items-center justify-between p-4 bg-muted">
           <h3 className="font-semibold text-lg text-foreground">
             Notifications
@@ -60,30 +58,38 @@ export const Notifications = ({ slug }: { slug: string }) => {
             </svg>
           </Button>
         </div>
-        <ScrollArea className="h-[400px]">
-          <div className="space-y-0.5">
-            {notifications?.map((notification) => (
-              <NotificationItem
-                notification={notification}
-                key={notification.id}
-              />
-            ))}
-            {hasNextPage && (
-              <Button
-                variant="ghost"
-                className="w-full text-muted-foreground hover:text-foreground font-medium h-12"
-                onClick={() => fetchNextPage()}
-                disabled={isFetchingNextPage}
-              >
-                {isFetchingNextPage ? (
-                  <Loader size={16} className="animate-spin" />
-                ) : (
-                  "Load more"
+        <div className="scrollbar-thumb overflow-y-auto max-h-[350px] min-h-[95px]">
+          <div className=" bg-black space-y-0.5">
+            {notifications?.length === 0 ? (
+              <div className="py-8 text-center text-muted-foreground">
+                No notifications yet
+              </div>
+            ) : (
+              <>
+                {notifications?.map((notification) => (
+                  <NotificationItem
+                    notification={notification}
+                    key={notification.id}
+                  />
+                ))}
+                {hasNextPage && (
+                  <Button
+                    variant="ghost"
+                    className="w-full text-muted-foreground hover:text-foreground font-medium h-12"
+                    onClick={() => fetchNextPage()}
+                    disabled={isFetchingNextPage}
+                  >
+                    {isFetchingNextPage ? (
+                      <Loader size={16} className="animate-spin" />
+                    ) : (
+                      "Load more"
+                    )}
+                  </Button>
                 )}
-              </Button>
+              </>
             )}
           </div>
-        </ScrollArea>
+        </div>
       </PopoverContent>
     </Popover>
   );

@@ -14,16 +14,12 @@ const NotificationItem = ({ notification }: Props) => {
   const { deleteMutation, isDeleting, isMarking, markAsSeen } =
     useNotificationsMutation(notification.id);
 
-  if (isDeleting) {
-    return null; // Hide the notification while deleting
-  }
-
   return (
     <div
       key={notification.id}
       className={`group relative flex flex-col gap-2 p-4 hover:bg-muted/50 transition-all duration-200 cursor-pointer ${
         !notification.isSeen ? "bg-muted border-l-2 border-primary" : ""
-      } ${isMarking ? "opacity-50" : ""}`}
+      } ${isMarking || isDeleting ? "opacity-50" : ""}`}
       onClick={() => {
         if (!notification.isSeen) {
           markAsSeen(
