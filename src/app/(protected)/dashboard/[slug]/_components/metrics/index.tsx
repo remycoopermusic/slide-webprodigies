@@ -26,7 +26,6 @@ const chartConfig = {
 const Chart = () => {
   const params = useParams();
   const { data: analytics, isLoading } = useAnalytics(params.slug as string);
-  console.log(analytics);
 
   if (isLoading) {
     return (
